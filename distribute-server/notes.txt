@@ -1,0 +1,11 @@
+create query for tmp table
+CREATE TABLE `tuition_management`.`tmp` ( `record_id` INT(11) NOT NULL , `record_type` INT(1) NOT NULL COMMENT '0 for s, 1 for t' , `insertion_timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , INDEX `record_index` (`record_id`, `record_type`)) ENGINE = InnoDB;
+
+create table for student_details table
+CREATE TABLE `tuition_management`.`student_details` ( `std_id` INT(11) NOT NULL AUTO_INCREMENT , `name` VARCHAR(100) NOT NULL , `contact` VARCHAR(20) NOT NULL , `email` VARCHAR(50) NOT NULL , `host` VARCHAR(20) NOT NULL , `orig_id` VARCHAR(20) NOT NULL COMMENT 'null for local insertion' , PRIMARY KEY (`std_id`)) ENGINE = InnoDB;
+
+create table for teacher_details
+CREATE TABLE `tuition_management`.`teacher_details` ( `teacher_id` INT(11) NOT NULL AUTO_INCREMENT , `name` VARCHAR(100) NOT NULL , `contact` VARCHAR(20) NOT NULL , `email` VARCHAR(50) NOT NULL , `host` VARCHAR(20) NOT NULL , `orig_id` VARCHAR(20) NOT NULL , PRIMARY KEY (`teacher_id`)) ENGINE = InnoDB;
+
+create table for async_logs
+CREATE TABLE `tuition_management`.`async_logs` ( `transaction_id` INT(11) NOT NULL AUTO_INCREMENT , `transaction_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`transaction_id`)) ENGINE = InnoDB;
