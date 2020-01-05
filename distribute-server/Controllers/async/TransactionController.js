@@ -12,7 +12,10 @@ const transactionController = async (req, res) => {
     if (token !== "SomeMasterToken")
       return res.json({ message: "Invalid Token", auth_status: false });
 
-    const transactionStatus = await transaction();
+    const { tables, desc } = req.body;
+
+    let transactionStatus = false;
+    await transaction(tables, () => (transactionStatus = true));
     if (transactionStatus !== true)
       return res.status(500).json({
         message: "Failed to perform transaction.",
@@ -30,7 +33,7 @@ const transactionController = async (req, res) => {
         query_status: false
       });
 
-    const logStatus = await insert();
+    const logStatus = await insert(desc);
     if (logStatus !== true)
       return res.status(500).json({
         message: "Failed to perform transaction(logging).",
@@ -38,8 +41,8 @@ const transactionController = async (req, res) => {
         error: logStatus,
         query_status: false
       });
- 
-    console.log('PUT /async 200');
+
+    console.log("PUT /async 200");
     return res.json({
       message: `Transaction performed Successfully, ${Date()} `,
       auth_status: true,

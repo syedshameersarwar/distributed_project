@@ -1,5 +1,5 @@
-export const getCurrentHost = (master, slave_a, slave_b) => {
-  switch (process.env.HOST_IDENTITY) {
+export const getHostConnection = (host, master, slave_a, slave_b) => {
+  switch (host) {
     case "MASTER":
       return master;
     case "SLAVE_A":

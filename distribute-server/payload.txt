@@ -4,3 +4,28 @@
 	"email":"aqeel@gmail.com",
 	"source_host": "MASTER"
 }
+
+ {"name": "MASter bhai",
+  "contact": "03454353453",
+  "email": "45435453@gmail.com",
+  "grade": "10",
+  "city": "Karachi",
+  "district": "West",
+  "address": "75 jfjwen",
+	"host":"MASTER",
+	"id": "6"
+ }
+
+
+{
+	"id":"1",
+	"host":"SLAVE_A",
+	"data":{
+	"name": "Edit teacher",
+  "contact": "03454353453",
+  "email": "45435453@gmail.com",
+  "city": "Karachi",
+  "district": "West",
+  "desc": "new desc"
+	}
+ }
