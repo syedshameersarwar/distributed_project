@@ -18,10 +18,8 @@ export const getLogs = async (req, res) => {
 
   if (!unit) unit = 10;
   if (!page) page = 1;
-  console.log(unit, page);
 
   const offset = (Number(page) - 1) * unit;
-  console.log(offset);
   const payload = await select(offset, unit);
 
   if (payload === false)

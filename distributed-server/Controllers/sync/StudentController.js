@@ -36,14 +36,12 @@ export const studentDelete = async (req, res) => {
 
 export const studentRead = async (req, res) => {
   let { unit, page } = req.params;
-  const { host } = req.body;
+  const { host } = req.query;
 
   if (!unit) unit = 10;
   if (!page) page = 1;
-  console.log(unit, page);
 
   const offset = (Number(page) - 1) * unit;
-  console.log(offset);
   const payload = await selectAll(host, offset, unit);
 
   if (payload === false)
@@ -57,7 +55,6 @@ export const studentRead = async (req, res) => {
 
 export const studentUpdate = async (req, res) => {
   const { host, id, data } = req.body;
-
   const state = await updateAll(host, id, data);
   if (state !== true)
     return res.status(200).json({ message: `Error in Student Sync update.` });

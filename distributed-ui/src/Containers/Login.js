@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Form, Icon, Input, Button, Typography, message as msg } from "antd";
-import axios from "axios";
 import "antd/dist/antd.css";
 import { apiEndpoint } from "../util";
 
@@ -12,6 +11,7 @@ const Login = props => {
   useEffect(() => {
     props.form.validateFields();
     return;
+    // eslint-disable-next-line
   }, []);
 
   const handleSubmit = e => {
@@ -19,28 +19,27 @@ const Login = props => {
     props.form.validateFields((err, values) => {
       if (!err) {
         setLoading(true);
-        axios
-          .post(
-            `${apiEndpoint}api/login`,
-            {
-              user: values.hostname,
-              pass: values.password
-            },
-            {
-              headers: {
-                "Content-Type": "application/json; charset=utf-8"
-              }
-            }
-          )
+
+        fetch(`${apiEndpoint}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          body: JSON.stringify({
+            user: values.hostname,
+            pass: values.password
+          })
+        })
+          .then(res => res.json())
           .then(payload => {
             setLoading(false);
-            const { message } = payload.data;
+            const { message } = payload;
             if (message) {
               msg.info(message);
               return;
             }
 
-            props.authorizer(payload.data);
+            props.authorizer(payload);
           })
           .catch(err => {
             setLoading(false);
@@ -78,7 +77,12 @@ const Login = props => {
           help={hostnameError || ""}
         >
           {getFieldDecorator("hostname", {
-            rules: [{ required: true, message: "Please input your Hostname!" }]
+            rules: [
+              {
+                required: true,
+                message: "Please input your Hostname!"
+              }
+            ]
           })(
             <Input
               prefix={<Icon type='user' style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -92,7 +96,12 @@ const Login = props => {
           help={passError || ""}
         >
           {getFieldDecorator("password", {
-            rules: [{ required: true, message: "Please input your Password!" }]
+            rules: [
+              {
+                required: true,
+                message: "Please input your Password!"
+              }
+            ]
           })(
             <Input
               prefix={<Icon type='lock' style={{ color: "rgba(0,0,0,.25)" }} />}

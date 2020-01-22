@@ -17,6 +17,17 @@ const inviteController = async (req, res) => {
         .json({ message: "Invalid Token", auth_status: false });
 
     const insertion_status = await insertOne(req.body);
+    if (typeof insertion_status === "object") {
+      const { isDuplicate } = insertion_status;
+      if (isDuplicate) {
+        return res.status(500).json({
+          message: `Duplication error, record already present.`,
+          auth_status: true,
+          query_status: true,
+          isDuplicate: true
+        });
+      }
+    }
     if (typeof insertion_status !== "number")
       return res.status(500).json({
         message: `Error in Invite(Master) insertion : ${insertion_status}`,

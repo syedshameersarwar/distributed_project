@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Route } from "react-router-dom";
-import Home from "../Components/Home";
+import Home from "./Home";
 import Control from "./Control";
 import UnAuthorized from "../extra/UnAuth";
 import Login from "./Login";

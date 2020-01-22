@@ -49,9 +49,7 @@ export const transaction = async (
       if (payload.isError) return payload.err;
 
       const entites = Object.assign([], payload.result);
-      console.log(entites);
       const processEntities = async entity => {
-        console.log(entity, table);
         try {
           const entityPayload = await promisify(
             master_connection,
@@ -59,12 +57,10 @@ export const transaction = async (
             Number(entity.record_id)
           );
           if (entityPayload.isError) return entityPayload.err;
-          console.log("ep:", entityPayload);
           const entityInsertion = await meta[table].insertAll(
             entityPayload.result[0],
             false
           );
-          console.log("ei:", entityInsertion);
 
           if (entityInsertion.isError) {
             console.log(
@@ -80,90 +76,17 @@ export const transaction = async (
         }
       };
       for (let entity of entites) {
-        console.log("entity:", entity);
         await processEntities(entity);
-        // if (state !== true) return false;
-        // return true;
       }
     };
     for (let table of tables) {
       await processTable(table);
-      // if (state !== true) return false;
-      // return true;
     }
     cb();
-    //return true;
   } catch (err) {
     console.log(err);
     return false;
   }
-
-  /*
-  try {
-    const student_query = "SELECT * FROM `tmp` WHERE `record_type` = 0";
-    const teacher_query = "SELECT * FROM `tmp` WHERE `record_type` = 1";
-    let payload;
-
-    payload = await promisify(master_connection, student_query);
-    if (payload.isError) return payload.err;
-
-    const students = Object.assign([], payload.result);
-    await students.forEach(async rec => {
-      try {
-        const getStudentQuery =
-          "SELECT * FROM `student_details` WHERE std_id = ?";
-        const studentPayload = await promisify(
-          master_connection,
-          getStudentQuery,
-          rec.record_id
-        );
-        if (studentPayload.isError) return studentPayload.err;
-
-        payload = await insertAllStudent(studentPayload.result[0], false);
-        if (payload.isError) {
-          console.log(
-            "Error in inserting student record asynchronously: ",
-            studentPayload.result
-          );
-        }
-      } catch (err) {
-        console.log(err);
-        return err;
-      }
-    });
-
-    payload = await promisify(master_connection, teacher_query);
-    if (payload.isError) return payload.err;
-
-    const teachers = Object.assign([], payload.result);
-    await teachers.forEach(async rec => {
-      try {
-        const getTeacherQuery =
-          "SELECT * FROM `teacher_details` WHERE teacher_id = ?";
-        const teacherPayload = await promisify(
-          master_connection,
-          getTeacherQuery,
-          rec.record_id
-        );
-        if (teacherPayload.isError) return teacherPayload.err;
-        payload = await insertAllTeacher(teacherPayload.result[0], false);
-        if (payload.isError) {
-          console.log(
-            "Error in inserting teacher record asynchronously: ",
-            teacherPayload.result
-          );
-        }
-      } catch (err) {
-        console.log(err);
-        return err;
-      }
-    });
-    return true;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
-  */
 };
 
 export const eject = async () => {
@@ -201,15 +124,4 @@ export const select = async (start, rows) => {
     console.log(err);
     return false;
   }
-  /*
-  try {
-    const query = "SELECT * FROM `tmp` LIMIT ?, ?";
-
-    const payload = await promisify(master_connection, query, [start, rows]);
-    if (payload.isError) return payload.err;
-    return payload.result;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }*/
 };

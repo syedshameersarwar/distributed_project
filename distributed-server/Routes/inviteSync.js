@@ -9,7 +9,7 @@ import {
 const router = Router();
 router.post("/", inviteInsert);
 router.get("/meta", getMeta);
-router.get("/:unit?/:page?", inviteRead);
+router.get("/:page?/:unit?", inviteRead);
 router.delete("/", inviteDelete);
 
 export default router;

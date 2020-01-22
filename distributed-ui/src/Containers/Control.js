@@ -1,38 +1,33 @@
 import React, { useState } from "react";
 import { Affix, Button, Spin, Icon, notification } from "antd";
-import axios from "axios";
 import { apiEndpoint } from "../util";
-
-axios.defaults.headers.common["Authorization"] = localStorage.getItem(
-  "AuthToken"
-);
 
 const Control = ({ host, logout, history }) => {
   const [loading, setLoading] = useState(false);
 
   const handleTransaction = () => {
     setLoading(true);
-    axios
-      .put(`${apiEndpoint}api/async`, {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8"
-        }
-      })
+
+    fetch(`${apiEndpoint}/async`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Authorization: localStorage.getItem("AuthToken")
+      }
+    })
+      .then(res => res.json())
       .then(payload => {
         setLoading(false);
-        if (payload.status === 200 && payload.data.query_status === true)
+
+        if (payload.status === 200 || payload.query_status === true)
           notification.success({
             message: "Success",
-            description: payload.data.message
+            description: payload.message
           });
       })
       .catch(err => {
         setLoading(false);
         console.error("Error in Transaction: ", err);
-        notification.success({
-          message: "Failed",
-          description: err.response
-        });
       });
   };
 

@@ -68,4 +68,12 @@ code {
   background-color: rgba(1, 0, 0, 0.81);
 }
 
+.editable-row .ant-form-explain {
+  position: absolute;
+  font-size: 12px;
+  margin-top: -4px;
+}
 
+.collection-create-form_last-form-item {
+  margin-bottom: 0;
+}

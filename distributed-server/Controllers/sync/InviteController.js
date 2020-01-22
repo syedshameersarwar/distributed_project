@@ -7,6 +7,17 @@ import {
 
 export const inviteInsert = async (req, res) => {
   const state = await insertAll(req.body);
+  if (typeof state === "object") {
+    const { isDuplicate } = state;
+    if (isDuplicate) {
+      return res.status(500).json({
+        message: `Duplication error, record already present.`,
+        auth_status: true,
+        query_status: true,
+        isDuplicate: true
+      });
+    }
+  }
 
   if (state !== true)
     return res
@@ -36,7 +47,7 @@ export const inviteDelete = async (req, res) => {
 
 export const inviteRead = async (req, res) => {
   let { unit, page } = req.params;
-  const { host } = req.body;
+  const { host } = req.query;
 
   if (!unit) unit = 10;
   if (!page) page = 1;
@@ -54,7 +65,7 @@ export const inviteRead = async (req, res) => {
 };
 
 export const getMeta = async (req, res) => {
-  const { host } = req.body;
+  const { host } = req.query;
   const payload = await getInsertMeta(host);
 
   if (payload === false)

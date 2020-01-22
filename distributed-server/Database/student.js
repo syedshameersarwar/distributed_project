@@ -130,7 +130,6 @@ export const insertOne = async dataObj => {
 };
 
 export const selectAll = async (host, start, rows) => {
-  //start,rows: number
   try {
     const selectQuery = "SELECT * FROM `student` LIMIT ?, ?";
     const lengthQuery = "SELECT COUNT(*) AS TOTAL FROM `student`";
@@ -163,7 +162,6 @@ export const selectAll = async (host, start, rows) => {
 };
 
 export const deleteAll = async (host, id) => {
-  //expects host and id from route,(frontend)
   try {
     const deleteSourceQuery = "DELETE FROM `student` WHERE id = ?";
     const deleteDestQuery = "DELETE FROM `student` WHERE orig_id = ?";
@@ -180,26 +178,26 @@ export const deleteAll = async (host, id) => {
 
     let payload;
 
-    payload = await promisify(first_db, deleteSourceQuery, id);
+    payload = await promisify(first_db, deleteSourceQuery, id.toString());
     if (payload.isError) return payload.err;
 
     if (payload.result.affectedRows !== 1) return false;
 
-    payload = await promisify(master_connection, deleteTmp, id);
+    payload = await promisify(master_connection, deleteTmp, id.toString());
     if (payload.isError) return payload.err;
 
     if (payload.result.affectedRows === 1) return true;
 
-    payload = await promisify(second_db, deleteDestQuery, id);
+    payload = await promisify(second_db, deleteDestQuery, id.toString());
     if (payload.isError) return payload.err;
 
     if (payload.result.affectedRows !== 1) return false;
 
-    payload = await promisify(third_db, deleteDestQuery, id);
+    payload = await promisify(third_db, deleteDestQuery, id.toString());
     if (payload.isError) return payload.err;
 
     if (payload.result.affectedRows !== 1) return false;
-    //console.log("Deleting std from system.");
+
     return true;
   } catch (err) {
     console.log(err);
@@ -208,7 +206,6 @@ export const deleteAll = async (host, id) => {
 };
 
 export const updateAll = async (host, id, dataObj) => {
-  //expects host from route, dataObj(frontend)
   try {
     const updateSourceQuery =
       "UPDATE `student` SET name = ?, contact = ?, email = ?, grade = ?, \
@@ -235,7 +232,7 @@ export const updateAll = async (host, id, dataObj) => {
       city,
       district,
       address,
-      id
+      id.toString()
     ]);
     if (payload.isError) return payload.err;
 
@@ -249,7 +246,7 @@ export const updateAll = async (host, id, dataObj) => {
       city,
       district,
       address,
-      id
+      id.toString()
     ]);
     if (payload.isError) return payload.err;
 
@@ -263,7 +260,7 @@ export const updateAll = async (host, id, dataObj) => {
       city,
       district,
       address,
-      id
+      id.toString()
     ]);
     if (payload.isError) return payload.err;
 
@@ -274,16 +271,3 @@ export const updateAll = async (host, id, dataObj) => {
     return err;
   }
 };
-
-const data = {
-  name: "Raza",
-  contact: "03454353453",
-  email: "45435453@gmail.com",
-  grade: "10",
-  city: "Karachi",
-  district: "West",
-  address: "75 jfjwen"
-};
-//console.log(selectAll("MASTER", 0, 10));
-//selectAll("SLAVE_B", 0, 10).then(r => console.log(r));
-//updateAll("MASTER", 3, data);

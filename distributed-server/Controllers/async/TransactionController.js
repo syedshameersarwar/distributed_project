@@ -8,7 +8,6 @@ const transactionController = async (req, res) => {
 
     if (!token)
       return res.json({ message: "Not authorized", auth_status: false });
-
     if (token !== "SomeMasterToken")
       return res.json({ message: "Invalid Token", auth_status: false });
 

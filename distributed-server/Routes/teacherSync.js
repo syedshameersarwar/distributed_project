@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 router.post("/", teacherInsert);
-router.get("/:unit?/:page?", teacherRead);
+router.get("/:page?/:unit?", teacherRead);
 router.put("/", teacherUpdate);
 router.delete("/", teacherDelete);
 

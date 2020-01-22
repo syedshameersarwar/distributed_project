@@ -36,7 +36,7 @@ export const teacherDelete = async (req, res) => {
 
 export const teacherRead = async (req, res) => {
   let { unit, page } = req.params;
-  const { host } = req.body;
+  const { host } = req.query;
 
   if (!unit) unit = 10;
   if (!page) page = 1;
